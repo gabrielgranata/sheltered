@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React from 'react';
 import {
   SafeAreaView,
@@ -15,7 +7,6 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
 import {
   Header,
   LearnMoreLinks,
@@ -23,10 +14,28 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-
+import 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import Map from './Map.js';
+import Login from './Login.js';
+
+const Stack = createStackNavigator();
+
 const App = () => {
   return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Login}
+        />
+        <Stack.Screen
+          name="Map"
+          component={Map}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
     // <>
     //   <StatusBar barStyle="dark-content" />
     //   <SafeAreaView>
@@ -70,8 +79,7 @@ const App = () => {
     //     </ScrollView>
     //   </SafeAreaView>
     // </>
-    <Map></Map>
-
+    // <Map></Map>
   );
 };
 
