@@ -5373,6 +5373,11 @@ react-native-maps@0.26.1:
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.26.1.tgz#6ec316259b38d259c8974448d894bd7a23101da4"
   integrity sha512-p4VTB8YB5ZmOmDRCUpoHZkm05amZwhIo04AJMBbB9+JAR2PNNfpo0vceoWX0Mag4wnePkdzPomeWMplr/wimTg==
 
+react-native-radar@^2.1.9:
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/react-native-radar/-/react-native-radar-2.1.9.tgz#3754f5bde097ecab98af270bc07e74b4a12769b5"
+  integrity sha512-Y9Bx9tPOZpBmIl/13oimzrtTvNjOlNzV7e9RTlVAFGr0LDKVsu+QXzgUj4oO4f18Tz/3q0BEhLdgU/FCkenQ2A==
+
 react-native-safe-area-context@0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-0.6.0.tgz#f53f5a5bcafb462a8798a26b145e68946389ad60"

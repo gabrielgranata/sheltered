@@ -1,8 +1,25 @@
 import React from 'react';
 import MapView from 'react-native-maps';
+import Radar from 'react-native-radar';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
 export default class App extends React.Component {
+
+    componentDidMount() {
+        Radar.setUserId("Gabriel's iPhone");
+        Radar.requestPermissions(true);
+
+        Radar.trackOnce().then((result) => {
+            console.log('success');
+            console.log(result);
+        }).catch((err) => {
+            console.log('error');
+            console.log(err);
+        })
+
+        Radar.startTracking();
+    }
+
     render() {
         return (
             <View style={styles.container}>
