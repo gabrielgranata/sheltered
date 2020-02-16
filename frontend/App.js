@@ -23,8 +23,11 @@ import Registration from './src/Registration.js';
 
 const Stack = createStackNavigator();
 
+<<<<<<< HEAD
 import MyCarousel from './Carousel';
 
+=======
+>>>>>>> master
 const App = () => {
   const navigation = useNavigation();
   return (
