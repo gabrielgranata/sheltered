@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Button,
@@ -8,77 +8,148 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-const background = require('../assets/images/background.jpeg');
+import MultiSelect from 'react-native-multiple-select';
+const background = require('../assets/images/background3.jpg');
+
+const items = [{
+  id: "food",
+  name: "Food"
+}, {
+  id: "shelter",
+  name: "Shelter"
+}, {
+  id: "clothing",
+  name: "Clothing"
+}
+];
 
 class Registration extends Component {
-  state = {
-    isClient: false,
+  constructor(props) {
+    super(props);
+    this.setState = {
+      isClient: false,
+      selectedServices: [],
+    };
+  }
+
+  onSelectedItemsChange = selectedServices => {
+    this.setState({ selectedServices });
   };
+
   toggleRegMode() {
-    const {isClient} = this.state;
+    const { isClient } = this.state;
     this.setState({
       isClient: !isClient,
     });
+  };
+
+  handleReg() {
+    // handle reg http request
+    const { navigation } = this.props;
+    navigation.navigate('Map');
   }
+
   render() {
-    const {isClient} = this.state;
+    const { navigation } = this.props;
+    const { isClient, selectedServices } = this.state;
     return (
       <ImageBackground
         source={background}
         style={[styles.background, styles.container]}
-        resizeMode="cover">
+        resizeMode="cover"
+      >
         <View style={styles.container} />
         <View style={styles.wrapper}>
           <View style={styles.toggleWrap}>
             <Button
               title={isClient ? 'Switch to User' : 'Switch to Client'}
               style={styles.toggleButton}
-              onClick={this.toggleRegMode}
+              onPress={this.toggleRegMode}
             />
           </View>
           <View style={styles.inputWrap}>
             <TextInput
-              placeholder="username"
-              style={styles.input}
-              resizeMode="contain"
-              underlineColorAndroid="transparent"
-            />
-            </View>
-            <View style={styles.inputWrap}>
-            <TextInput
-              placeholder="password"
-              style={styles.input}
-              resizeMode="contain"
-              underlineColorAndroid="transparent"
-            />
-            </View>
-            <View style={styles.inputWrap}>
-            <TextInput
-              placeholder="firstName"
-              style={styles.input}
-              resizeMode="contain"
-              underlineColorAndroid="transparent"
-            />
-            </View>
-            <View style={styles.inputWrap}>
-            <TextInput
-              placeholder="lastName"
-              style={styles.input}
-              resizeMode="contain"
-              underlineColorAndroid="transparent"
-            />
-            </View>
-            <View style={styles.inputWrap}>
-            <TextInput
-              placeholder="address"
+              placeholder="Email Address"
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
             />
           </View>
+          <View style={styles.inputWrap}>
+            <TextInput
+              placeholder="Username"
+              style={styles.input}
+              resizeMode="contain"
+              underlineColorAndroid="transparent"
+            />
+          </View>
+          <View style={styles.inputWrap}>
+            <TextInput
+              placeholder="Password"
+              style={styles.input}
+              resizeMode="contain"
+              underlineColorAndroid="transparent"
+            />
+          </View>
+          {
+            isClient && (
+              <>
+                <View style={styles.inputWrap}>
+                  <TextInput
+                    placeholder="Organization Name"
+                    style={styles.input}
+                    resizeMode="contain"
+                    underlineColorAndroid="transparent"
+                  />
+                </View>
+                <View>
+                  <MultiSelect
+                    items={items}
+                    uniqueKey="id"
+                    onSelectedItemsChange={this.onSelectedItemsChange}
+                    ref={(component) => { this.multiSelect = component }}
+                    selectedItems={selectedServices}
+                    displayKey="name"
+                    tagRemoveIconColor="#000000"
+                    tagBorderColor="#000000"
+                    tagTextColor="#000000"
+                    selectedItemTextColor="#000000"
+                    selectedItemIconColor="#000000"
+                    itemTextColor="#CCC"
+                    styleInputGroup={styles.dropdownMenu}
+                    styleListContainer={styles.dropdownMenu}
+                    styleDropdownMenuSubsection={styles.dropdownMenu}
+                    styleSelectorContainer={styles.dropdownMenu}
+                  />
+                </View>
+                <View style={styles.inputWrap}>
+                  <TextInput
+                    placeholder="Address"
+                    style={styles.input}
+                    resizeMode="contain"
+                    underlineColorAndroid="transparent"
+                  />
+                </View>
+                <View style={styles.inputWrap}>
+                  <TextInput
+                    placeholder="Phone Number"
+                    style={styles.input}
+                    resizeMode="contain"
+                    underlineColorAndroid="transparent"
+                  />
+                </View>
+              </>
+            )
+          }
+        </View>
+        <View style={styles.button}>
+          <Button
+            title="Sign Up"
+            onPress={this.handleReg}
+          />
         </View>
         <View style={styles.container} />
-      </ImageBackground>
+      </ImageBackground >
     );
   }
 }
@@ -104,6 +175,15 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     backgroundColor: '#FFF',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    elevation: 1
+  },
+  dropdownMenu: {
+    borderRadius: 10
   },
   toggleWrap: {
     flex: 1,
@@ -114,11 +194,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
   },
   button: {
-    backgroundColor: '#d73352',
-    paddingVertical: 10,
-    marginVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    color: '#d73352',
   },
 });
 

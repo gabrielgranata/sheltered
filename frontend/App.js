@@ -15,32 +15,44 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Map from './src/Map.js';
 import Login from './src/Login.js';
 import Registration from './src/Registration.js';
 
 const Stack = createStackNavigator();
 
-import Map from './Map.js';
 import MyCarousel from './Carousel';
 
 const App = () => {
+  const navigation = useNavigation();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        initialRouteName="Registration"
+        headerMode="float"
+      >
         <Stack.Screen
-          name="Home"
-          component={Registration}
+          name="Registration"
+          component={<Registration navigation={navigation} />}
+          options={{
+            title: 'Register',
+          }}
         />
         <Stack.Screen
           name="Login"
-          component={Login}
+          component={<Login navigation={navigation} />}
+          options={{
+            title: 'Login',
+          }}
         />
         <Stack.Screen
           name="Map"
           component={Map}
+          options={{
+            title: 'maps',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

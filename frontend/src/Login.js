@@ -12,6 +12,7 @@ const background = require("../assets/images/background.jpeg");
 
 export default class Login extends Component {
   render() {
+    const { navigation } = this.props;
     return (
       <ImageBackground
         source={background}
@@ -50,7 +51,7 @@ export default class Login extends Component {
         </View>
         <View style={styles.container} />
       </ImageBackground>
-        
+
     );
   }
 }
