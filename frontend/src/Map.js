@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Carousel from 'react-native-snap-carousel';
-import MyCarousel from './Carousel'
-import Geolocation from '@react-native-community/geolocation'
+import Geolocation from '@react-native-community/geolocation';
 import { View, StyleSheet, Dimensions, Text, Image, Alert } from 'react-native';
 import { request, PERMISSIONS } from 'react-native-permissions';
 
