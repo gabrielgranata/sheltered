@@ -25,6 +25,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import Map from './Map.js';
+import MyCarousel from './Carousel';
+
 const App = () => {
   return (
     // <>
