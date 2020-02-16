@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 const background = require('../assets/images/background.jpeg');
-const icon = require('../assets/images/image.png');
+const logo = require('../assets/images/image.png');
 
 class Home extends Component {
 
@@ -34,6 +34,12 @@ class Home extends Component {
         resizeMode="cover">
         <View style={styles.container} />
         <View style={styles.wrapper}>
+          <View style={styles.logoWrap}>
+            <Image
+              source={logo}
+              style={styles.logo}
+            />
+          </View>
           <View style={styles.buttonWrap}>
             <Button styles={styles.button}
               title="Register a Shelter"
