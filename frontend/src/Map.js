@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import React, { Component } from 'react';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Carousel from 'react-native-snap-carousel';
 import Geolocation from '@react-native-community/geolocation';
-import {View, StyleSheet, Dimensions, Text, Image, Alert} from 'react-native';
-import {request, PERMISSIONS} from 'react-native-permissions';
+import { View, StyleSheet, Dimensions, Text, Image, Alert } from 'react-native';
+import { request, PERMISSIONS } from 'react-native-permissions';
 
 const apiKey = 'AIzaSyDVpsVZ9UhQU32yUSGTAeeJzwZSFPAe7ps';
 
@@ -61,12 +61,11 @@ export default class Map extends Component {
   async componentDidMount() {
     this.requestLocationPermission();
     let servicesA = await this.getServices();
-    console.log(servicesA);
     for (let i = 0; i < servicesA.length; i++) {
       servicesA[i] = servicesA[i].toLowerCase();
     }
     let shelters = await fetch(
-      `http://10.0.2.2:3001/getPlacesByServices?services=["shelter", "medical"]`,
+      `http://10.0.2.2:3001/getPlacesByServices?services=${JSON.stringify(servicesA)}`,
       {
         method: 'POST',
       },
@@ -109,7 +108,8 @@ export default class Map extends Component {
       shelter.lat = location.lat;
       shelter.lng = location.lng;
     });
-    Promise.all(requests).then(function() {
+    Promise.all(requests).then(function () {
+      console.log(shelters);
       t.setState({
         shelters: shelters,
         loading: false,
@@ -118,7 +118,7 @@ export default class Map extends Component {
   };
 
   render() {
-    const {shelters, loading} = this.state;
+    const { shelters, loading } = this.state;
 
     if (loading) return <Text>Loading...</Text>;
     return (
@@ -137,7 +137,7 @@ export default class Map extends Component {
           {shelters.map((shelter, index) => {
             return (
               <Marker
-                coordinate={{latitude: shelter.lat, longitude: shelter.lng}}
+                coordinate={{ latitude: shelter.lat, longitude: shelter.lng }}
                 onPress={() => {
                   this.onMarkerPressed(index);
                 }}></Marker>
@@ -170,10 +170,10 @@ export default class Map extends Component {
           longitudeDelta: 0.035,
         };
 
-        this.setState({initialPosition});
+        this.setState({ initialPosition });
       },
       error => Alert.alert(error.message),
-      {enableHighAccuracy: true, timeout: 10000, maximumAge: 1000},
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000 },
     );
   };
 
@@ -199,11 +199,11 @@ export default class Map extends Component {
     });
   };
 
-  renderCarouselItem = ({item}) => {
+  renderCarouselItem = ({ item }) => {
     return (
       <View style={styles.cardContainer}>
         <Text style={styles.titleStyle}>{item.name}</Text>
-        <Text style={{marginTop: 50, alignSelf: 'center'}}>{item.address}</Text>
+        <Text style={{ marginTop: 50, alignSelf: 'center' }}>{item.address}</Text>
       </View>
     );
   };
@@ -221,6 +221,7 @@ export default class Map extends Component {
     let lng;
     lat = resultJson.results[0]['geometry']['location']['lat'];
     lng = resultJson.results[0]['geometry']['location']['lng'];
+
     return {
       lat: lat,
       lng: lng,
