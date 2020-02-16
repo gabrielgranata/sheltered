@@ -78,13 +78,16 @@ app.post("/addShelter", async(req, res) => {
 
   const name = req.query.name;
   const address = req.query.address;
+  const services = JSON.parse(req.query.services);
 
+  console.log(services);
 
 
   const collection = client.db("main").collection('places');
   await collection.insertOne({
     name: name,
-    address: address
+    address: address,
+    services: services
   });
 
   res.send({status: 0, msg: "Success", data: {name, address}});

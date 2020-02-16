@@ -9,11 +9,22 @@ import {
   TouchableOpacity,
 } from 'react-native';
 const background = require('../assets/images/background.jpeg');
+import SelectMultiple from 'react-native-select-multiple';
+
+const availServices = ['Shelter', 'Food', 'Medical', 'Other'];
 
 class Registration extends Component {
   state = {
     isClient: false,
+    services: [],
   };
+
+  onSelectionsChange = (selections) => {
+    this.setState({
+      services: selections
+    });
+  }
+
   toggleRegMode() {
     const { isClient } = this.state;
     this.setState({
@@ -22,11 +33,12 @@ class Registration extends Component {
       address: '',
       username: '',
       password: '',
-      userType: 'shelter'
+      userType: 'shelter',
+      services: []
     });
   }
   render() {
-    const { isClient } = this.state;
+    const { name, services, username, address, password } = this.state;
     const { navigation } = this.props;
     return (
       <ImageBackground
@@ -94,14 +106,20 @@ class Registration extends Component {
               }}
             />
           </View>
+          <View>
+            <SelectMultiple
+              items={availServices}
+              selectedItems={services}
+              onSelectionsChange={this.onSelectionsChange} />
+          </View>
           <Button
             title="Sign up"
             onPress={async () => {
 
-              let shelterResult = await fetch(`http://10.0.2.2:3001/addShelter?name=${this.state.name}&address=${this.state.address}`, {
+              let shelterResult = await fetch(`http://10.0.2.2:3001/addShelter?name=${name}&address=${address}&services=${JSON.stringify(services)}`, {
                 method: 'POST'
               });
-              let userResult = await fetch(`http://10.0.2.2:3001/addAccount?username=${this.state.username}&password=${this.state.password}`, {
+              let userResult = await fetch(`http://10.0.2.2:3001/addAccount?username=${username}&password=${password}`, {
                 method: 'POST',
               });
               navigation.navigate('Map');
