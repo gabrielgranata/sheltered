@@ -17,8 +17,9 @@ import {
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Map from './Map.js';
-import Login from './Login.js';
+import Map from './src/Map.js';
+import Login from './src/Login.js';
+import Registration from './src/Registration.js';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,10 @@ const App = () => {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
+          component={Registration}
+        />
+        <Stack.Screen
+          name="Login"
           component={Login}
         />
         <Stack.Screen
