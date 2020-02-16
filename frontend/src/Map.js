@@ -39,11 +39,15 @@ export default class Map extends Component {
             { name: 'Out of the Cold. Overnight Shelters', address: "All Saints' (Kingsway) Anglican Church, 2850 Bloor St West, Toronto, ON M8X 1B2", lat: 0, lng: 0 },
             { name: 'Canadian Red Cross, Toronto Branch', address: "557 Dixon Rd Unit 122, Toronto, ON M9W 1A8", lat: 0, lng: 0 },
             { name: 'Salvation Army Islington Avenue', address: '2671 Islington Ave 3rd Fl, Toronto, ON M9V 2X6', lat: 0, lng: 0 }
-        ]
+        ],
+        loading: true
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.requestLocationPermission();
+
+        let shelters = await fetch('http://10.0.2.2:3001/getPlaces');
+        await this.convertAllToLatLong(await shelters.json());
     }
 
     requestLocationPermission = async () => {
@@ -57,12 +61,25 @@ export default class Map extends Component {
         }
     }
 
-    render() {
-        this.state.shelters.forEach(async shelter => {
+    convertAllToLatLong = async (shelters) => {
+
+        let t = this;
+        const requests = shelters.map(async shelter => {
             let location = await this.convertToLatLong(shelter.address);
             shelter.lat = location.lat;
             shelter.lng = location.lng;
-        });
+        })
+        Promise.all(requests).then(function() {
+            t.setState({
+                shelters: shelters, loading: false
+            })    
+        })
+        
+    }
+
+    render() {
+        const {shelters, loading} = this.state;
+        if (loading) return <Text>Loading...</Text>
         return (
             <View style={styles.container}>
                 <MapView
@@ -76,8 +93,9 @@ export default class Map extends Component {
                     style={styles.map}
 
                 >
-                    {this.state.shelters.map((shelter, index) => {
+                    {shelters.map((shelter, index) => {
 
+                        console.log('render:' + shelter);
                         return (
                             <Marker
                                 coordinate={{ latitude: shelter.lat, longitude: shelter.lng }}
