@@ -96,4 +96,10 @@ app.post("/updateProfile", async (req, res) => {
   }
 });
 
+app.get("/getPlaces", async (req, res) => {
+  const collection = client.db("main").collection("places");
+  let items = await collection.find().toArray();
+  res.send(items);
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
