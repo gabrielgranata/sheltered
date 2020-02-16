@@ -10,19 +10,25 @@ import {
 } from 'react-native';
 const background = require('../assets/images/background.jpeg');
 
+const availServices=['Shelter', 'Food', 'Medical', 'Other'];
+import SelectMultiple from 'react-native-select-multiple';
+
 class RegisterUser extends Component {
+
   state = {
-    isClient: false,
-  };
-  toggleRegMode() {
-    const { isClient } = this.state;
+    username: '',
+    password: '',
+    services: []
+  }
+
+
+  onSelectionsChange = (selections) => {
     this.setState({
-      username: '',
-      password: ''
-    });
+      services: selections
+    })
   }
   render() {
-    const { isClient } = this.state;
+    const { username, password, services } = this.state;
     const { navigation } = this.props;
     return (
       <ImageBackground
@@ -57,14 +63,21 @@ class RegisterUser extends Component {
               }}
             />
           </View>
+          <View>
+            <SelectMultiple
+              items={availServices}
+              selectedItems={services}
+              onSelectionsChange={this.onSelectionsChange} />
+          </View>
           <Button
             title="Sign up"
             onPress={async () => {
 
-              let userResult = await fetch(`http://10.0.2.2:3001/addAccount?username=${this.state.username}&password=${this.state.password}`, {
+              let userResult = await fetch(`http://10.0.2.2:3001/addAccount?username=${username}&password=${password}&services=${JSON.stringify(services)}`, {
                 method: 'POST',
               });
-              navigation.navigate('Map');
+
+              navigation.navigate('Map', {services: services});
             }}
           />
         </View>

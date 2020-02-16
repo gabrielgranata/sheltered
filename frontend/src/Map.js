@@ -45,9 +45,19 @@ export default class Map extends Component {
 
     async componentDidMount() {
         this.requestLocationPermission();
-
-        let shelters = await fetch('http://10.0.2.2:3001/getPlaces');
+        let servicesA = await this.getServices();
+        let shelters = await fetch(`http://10.0.2.2:3001/getPlacesByServices?services=${JSON.stringify(servicesA)}`);
         await this.convertAllToLatLong(await shelters.json());
+        
+    }
+
+    getServices = () => {
+        const services = this.props.route.params.services;
+        let servicesArray = [];
+        for(let i = 0; i < services.length; i++) {
+            servicesArray.push(services[i]["value"]);
+        }
+        return servicesArray;
     }
 
     requestLocationPermission = async () => {
@@ -79,6 +89,7 @@ export default class Map extends Component {
 
     render() {
         const {shelters, loading} = this.state;
+
         if (loading) return <Text>Loading...</Text>
         return (
             <View style={styles.container}>
@@ -95,7 +106,6 @@ export default class Map extends Component {
                 >
                     {shelters.map((shelter, index) => {
 
-                        console.log('render:' + shelter);
                         return (
                             <Marker
                                 coordinate={{ latitude: shelter.lat, longitude: shelter.lng }}

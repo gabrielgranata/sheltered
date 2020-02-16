@@ -26,6 +26,9 @@ app.post("/addAccount", async (req, res) => {
 
   const username = req.query.username;
   const password = req.query.password;
+  const services = JSON.parse(req.query.services);
+
+  console.log(services);
 
   const collection = client.db("main").collection('users');
   await collection.findOne({ username }, async (err, doc) => {
@@ -36,9 +39,9 @@ app.post("/addAccount", async (req, res) => {
       returnObj = { status: 2, msg: err };
     } else {
       try {
-        const accountDoc = { username, password };
+        const accountDoc = { username, password, services };
         await collection.insertOne(accountDoc);
-        returnObj = { status: 0, msg: "Success" };
+        returnObj = { status: 0, msg: "Success", services: services };
       } catch (error) {
         returnObj = { status: 2, msg: error };
       }
@@ -64,10 +67,10 @@ app.post("/loginAccount", async (req, res) => {
       } else if (err) {
         returnObj = { status: 2, msg: err };
       } else {
-        const { _id, name, password: actualPassword } = doc;
+        const { _id, name, password: actualPassword, services } = doc;
         if (password !== actualPassword)
           returnObj = { status: 2, msg: "Incorrect password" };
-        else returnObj = { status: 0, msg: "Success", data: { _id, name } };
+        else returnObj = { status: 0, msg: "Success", data: { _id, name, services } };
       }
       res.send(JSON.stringify(returnObj));
     }

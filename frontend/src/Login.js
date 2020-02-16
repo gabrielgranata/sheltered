@@ -61,10 +61,11 @@ class RegisterUser extends Component {
             title="Login"
             onPress={async () => {
 
-              let userResult = await fetch(`http://10.0.2.2:3001/login?username=${this.state.username}&password=${this.state.password}`, {
+              let userResult = await fetch(`http://10.0.2.2:3001/loginAccount?username=${this.state.username}&password=${this.state.password}`, {
                 method: 'POST',
               });
-              navigation.navigate('Map');
+              let services = (await userResult.json())["data"]["services"];
+              navigation.navigate('Map', {services: services});
             }}
           />
         </View>

@@ -122,7 +122,7 @@ class Registration extends Component {
               let userResult = await fetch(`http://10.0.2.2:3001/addAccount?username=${username}&password=${password}`, {
                 method: 'POST',
               });
-              navigation.navigate('Map');
+              navigation.navigate('Map', {services: services});
             }}
           />
         </View>
