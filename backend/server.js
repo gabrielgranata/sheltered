@@ -103,8 +103,29 @@ app.post("/updateProfile", async (req, res) => {
 
 app.get("/getPlaces", async (req, res) => {
   const collection = client.db("main").collection("places");
-  let items = await collection.find().toArray();
-  res.send(items);
+  let returnObj = { status: 0, msg: "" };
+  try {
+    let items = await collection.find().toArray();
+    returnObj = { status: 0, msg: "Success", data: items };
+  } catch (error) {
+    returnObj = { status: 2, msg: error };
+  }
+  res.send(returnObj);
 });
+
+app.get("/addPlace", async (req, res) => {
+  const { place } = req.body;
+  const collection = client.db("main").collection("places");
+  let returnObj = { status: 0, msg: "" };
+  try {
+    await collection.insertOne(place);
+    returnObj = { status: 0, msg: "Success" };
+  } catch (error) {
+    returnObj = { status: 2, msg: error };
+  }
+  res.send(returnObj);
+});
+
+app.post("/");
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
