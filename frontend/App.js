@@ -23,9 +23,6 @@ import Registration from './src/Registration.js';
 
 const Stack = createStackNavigator();
 
-import Map from './src/Map.js';
-import MyCarousel from './src/Carousel';
-
 const App = () => {
   return (
     <NavigationContainer>
