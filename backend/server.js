@@ -23,14 +23,13 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/addAccount", async (req, res) => {
-
   const username = req.query.username;
   const password = req.query.password;
   const services = JSON.parse(req.query.services);
 
   console.log(services);
 
-  const collection = client.db("main").collection('users');
+  const collection = client.db("main").collection("users");
   await collection.findOne({ username }, async (err, doc) => {
     let returnObj = { status: 0, msg: "" };
     if (!!doc) {
@@ -51,13 +50,12 @@ app.post("/addAccount", async (req, res) => {
 });
 
 app.post("/loginAccount", async (req, res) => {
-  
   const username = req.query.username;
   const password = req.query.password;
-  
+
   let returnObj = { status: 0, msg: "" };
 
-  const collection = client.db("main").collection('users');
+  const collection = client.db("main").collection("users");
   await collection.findOne(
     { username },
     { _id: 1, name: 1, password: 1 },
@@ -77,24 +75,22 @@ app.post("/loginAccount", async (req, res) => {
   );
 });
 
-app.post("/addShelter", async(req, res) => {
-
+app.post("/addShelter", async (req, res) => {
   const name = req.query.name;
   const address = req.query.address;
   const services = JSON.parse(req.query.services);
 
   console.log(services);
 
-
-  const collection = client.db("main").collection('places');
+  const collection = client.db("main").collection("places");
   await collection.insertOne({
     name: name,
     address: address,
     services: services
   });
 
-  res.send({status: 0, msg: "Success", data: {name, address}});
-})
+  res.send({ status: 0, msg: "Success", data: { name, address } });
+});
 
 app.post("/getProfile", async (req, res) => {
   const { account } = req.body;
@@ -130,6 +126,24 @@ app.get("/getPlaces", async (req, res) => {
   const collection = client.db("main").collection("places");
   let items = await collection.find().toArray();
   res.send(items);
+});
+
+app.post("/getPlacesByServices", async (req, res) => {
+  const { services } = req.query;
+  const parsedServices = JSON.parse(services);
+  console.log(services);
+
+  let returnObj = { status: 0, msg: "" };
+  const collection = client.db("main").collection("places");
+  try {
+    const places = await collection
+      .find({ services: { $in: parsedServices } })
+      .toArray();
+    returnObj = { status: 0, msg: "Success", data: places };
+  } catch (error) {
+    returnObj = { status: 2, msg: error };
+  }
+  res.send(JSON.stringify(returnObj));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
