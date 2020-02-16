@@ -23,10 +23,11 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/addAccount", async (req, res) => {
-  const { account } = req.body;
-  const { username, password, accountType } = account;
 
-  const collection = client.db("main").collection(accountType);
+  const username = req.query.username;
+  const password = req.query.password;
+
+  const collection = client.db("main").collection('users');
   await collection.findOne({ username }, async (err, doc) => {
     let returnObj = { status: 0, msg: "" };
     if (!!doc) {
@@ -47,11 +48,13 @@ app.post("/addAccount", async (req, res) => {
 });
 
 app.post("/loginAccount", async (req, res) => {
-  const { account } = req.body;
-  const { username, password, accountType } = account;
+  
+  const username = req.query.username;
+  const password = req.query.password;
+  
   let returnObj = { status: 0, msg: "" };
 
-  const collection = client.db("main").collection(accountType);
+  const collection = client.db("main").collection('users');
   await collection.findOne(
     { username },
     { _id: 1, name: 1, password: 1 },
@@ -70,6 +73,22 @@ app.post("/loginAccount", async (req, res) => {
     }
   );
 });
+
+app.post("/addShelter", async(req, res) => {
+
+  const name = req.query.name;
+  const address = req.query.address;
+
+
+
+  const collection = client.db("main").collection('places');
+  await collection.insertOne({
+    name: name,
+    address: address
+  });
+
+  res.send({status: 0, msg: "Success", data: {name, address}});
+})
 
 app.post("/getProfile", async (req, res) => {
   const { account } = req.body;

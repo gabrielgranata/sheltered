@@ -1,56 +1,75 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
+  Button,
   Text,
   View,
   ImageBackground,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
+const background = require('../assets/images/background.jpeg');
 
-const background = require("../assets/images/background.jpeg");
-
-export default class Login extends Component {
+class RegisterUser extends Component {
+  state = {
+    isClient: false,
+  };
+  toggleRegMode() {
+    const { isClient } = this.state;
+    this.setState({
+      username: '',
+      password: ''
+    });
+  }
   render() {
+    const { isClient } = this.state;
+    const { navigation } = this.props;
     return (
       <ImageBackground
         source={background}
         style={[styles.background, styles.container]}
-        resizeMode="cover"
-      >
+        resizeMode="cover">
         <View style={styles.container} />
         <View style={styles.wrapper}>
           <View style={styles.inputWrap}>
             <TextInput
-              placeholder="username"
+              placeholder="Username"
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
+              onChangeText={(text) => {
+                this.setState({
+                  username: text
+                })
+              }}
             />
           </View>
           <View style={styles.inputWrap}>
             <TextInput
-              placeholder="password"
-              secureTextEntry
+              placeholder="Password"
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
+              onChangeText={(text) => {
+                this.setState({
+                  password: text
+                })
+              }}
             />
           </View>
-          <TouchableOpacity activeOpacity={.5}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>Sign In</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={.5}>
-            <View>
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </View>
-          </TouchableOpacity>
+          <Button
+            title="Login"
+            onPress={async () => {
+
+              let userResult = await fetch(`http://10.0.2.2:3001/login?username=${this.state.username}&password=${this.state.password}`, {
+                method: 'POST',
+              });
+              navigation.navigate('Map');
+            }}
+          />
         </View>
         <View style={styles.container} />
       </ImageBackground>
-        
     );
   }
 }
@@ -60,37 +79,38 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   background: {
-    height: "100%",
-    width: "100%",
+    width: '100%',
+    height: '100%',
   },
   wrapper: {
     paddingHorizontal: 15,
   },
   inputWrap: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginVertical: 10,
     height: 40,
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   input: {
     flex: 1,
     paddingHorizontal: 10,
-    backgroundColor: '#FFF'
+    backgroundColor: '#FFF',
+  },
+  toggleWrap: {
+    flex: 1,
+    flexDirection: 'row-reverse',
+    backgroundColor: 'transparent',
+  },
+  toggleButton: {
+    borderStyle: 'solid',
   },
   button: {
-    backgroundColor: "#d73352",
-    paddingVertical: 15,
-    marginVertical: 15,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 18
-  },
-  forgotPasswordText: {
-    color: "#FFF",
-    backgroundColor: "transparent",
-    textAlign: "center"
+    backgroundColor: '#d73352',
+    paddingVertical: 10,
+    marginVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
+
+export default RegisterUser;

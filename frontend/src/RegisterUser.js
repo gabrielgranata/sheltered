@@ -10,19 +10,15 @@ import {
 } from 'react-native';
 const background = require('../assets/images/background.jpeg');
 
-class Registration extends Component {
+class RegisterUser extends Component {
   state = {
     isClient: false,
   };
   toggleRegMode() {
     const { isClient } = this.state;
     this.setState({
-      isClient: !isClient,
-      name: '',
-      address: '',
       username: '',
-      password: '',
-      userType: 'shelter'
+      password: ''
     });
   }
   render() {
@@ -35,39 +31,6 @@ class Registration extends Component {
         resizeMode="cover">
         <View style={styles.container} />
         <View style={styles.wrapper}>
-          {/* <View style={styles.toggleWrap}>
-            <Button
-              title={isClient ? 'Switch to User' : 'Switch to Client'}
-              style={styles.toggleButton}
-              onClick={this.toggleRegMode}
-            />
-          </View> */}
-          <View style={styles.inputWrap}>
-            <TextInput
-              placeholder="Shelter Name"
-              style={styles.input}
-              resizeMode="contain"
-              underlineColorAndroid="transparent"
-              onChangeText={(text) => {
-                this.setState({
-                  name: text
-                })
-              }}
-            />
-          </View>
-          <View style={styles.inputWrap}>
-            <TextInput
-              placeholder="Address"
-              style={styles.input}
-              resizeMode="contain"
-              underlineColorAndroid="transparent"
-              onChangeText={(text) => {
-                this.setState({
-                  address: text
-                })
-              }}
-            />
-          </View>
           <View style={styles.inputWrap}>
             <TextInput
               placeholder="Username"
@@ -98,9 +61,6 @@ class Registration extends Component {
             title="Sign up"
             onPress={async () => {
 
-              let shelterResult = await fetch(`http://10.0.2.2:3001/addShelter?name=${this.state.name}&address=${this.state.address}`, {
-                method: 'POST'
-              });
               let userResult = await fetch(`http://10.0.2.2:3001/addAccount?username=${this.state.username}&password=${this.state.password}`, {
                 method: 'POST',
               });
@@ -153,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Registration;
+export default RegisterUser;

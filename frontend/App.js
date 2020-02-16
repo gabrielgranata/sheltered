@@ -20,6 +20,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Map from './src/Map.js';
 import Login from './src/Login.js';
 import Registration from './src/Registration.js';
+import RegisterUser from './src/RegisterUser';
+import Home from './src/Home.js'
 
 const Stack = createStackNavigator();
 
@@ -29,7 +31,15 @@ const App = () => {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
+          component={Home}
+        />
+        <Stack.Screen
+          name="Register"
           component={Registration}
+        />
+        <Stack.Screen
+          name="RegisterUser"
+          component={RegisterUser}
         />
         <Stack.Screen
           name="Login"
