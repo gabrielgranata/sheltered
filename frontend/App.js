@@ -21,34 +21,21 @@ import Map from './src/Map.js';
 import Login from './src/Login.js';
 import Registration from './src/Registration.js';
 import RegisterUser from './src/RegisterUser';
-import Home from './src/Home.js'
+import Home from './src/Home.js';
 
 const Stack = createStackNavigator();
+
+console.disableYellowBox = true;
 
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Home"
-          component={Home}
-        />
-        <Stack.Screen
-          name="Register"
-          component={Registration}
-        />
-        <Stack.Screen
-          name="RegisterUser"
-          component={RegisterUser}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-        />
-        <Stack.Screen
-          name="Map"
-          component={Map}
-        />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Register" component={Registration} />
+        <Stack.Screen name="RegisterUser" component={RegisterUser} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Map" component={Map} />
       </Stack.Navigator>
     </NavigationContainer>
     // <>
