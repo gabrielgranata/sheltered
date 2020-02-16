@@ -77,11 +77,12 @@ export default class Map extends Component {
                     style={styles.map}
 
                 >
-                    {this.state.shelters.map(shelter => {
+                    {this.state.shelters.map((shelter, index) => {
 
                         return (
                             <Marker
                                 coordinate={{ latitude: shelter.lat, longitude: shelter.lng }}
+                                onPress={() => {this.onMarkerPressed(index)}}
                             >
 
                             </Marker>
@@ -90,6 +91,7 @@ export default class Map extends Component {
                     })}
                 </MapView>
                 <Carousel
+                    removeClippedSubviews={false}
                     ref={(c) => { this._carousel = c; }}
                     data={this.state.shelters}
                     containerCustomStyle={styles.carousel}
@@ -120,14 +122,16 @@ export default class Map extends Component {
         )
     }
 
-    // onMarkerPress = (location, index) => {
-    //     this._map.animateToRegion({
-    //         latitude: position.coords.latitude,
-    //         longitude: position.coords.longitude,
-    //         latitudeDelta: 0.09,
-    //         longitudeDelta: 0.035
-    //     })
-    // }
+    onMarkerPressed = (index) => {
+        this._map.animateToRegion({
+            latitude: this.state.shelters[index].lat,
+            longitude: this.state.shelters[index].lng,
+            latitudeDelta: 0.09,
+            longitudeDelta: 0.035
+        })
+
+        this._carousel.snapToItem(index)
+    }
 
     onCarouselItemChange = (index) => {
         let location = this.state.shelters[index];
