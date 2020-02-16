@@ -25,9 +25,9 @@ app.get("/", async (req, res) => {
 app.post("/addAccount", async (req, res) => {
   const username = req.query.username;
   const password = req.query.password;
-  const services = JSON.parse(req.query.services);
+  const services = req.query.services;
 
-  console.log(services);
+  // console.log(services);
 
   const collection = client.db("main").collection("users");
   await collection.findOne({ username }, async (err, doc) => {
@@ -68,7 +68,12 @@ app.post("/loginAccount", async (req, res) => {
         const { _id, name, password: actualPassword, services } = doc;
         if (password !== actualPassword)
           returnObj = { status: 2, msg: "Incorrect password" };
-        else returnObj = { status: 0, msg: "Success", data: { _id, name, services } };
+        else
+          returnObj = {
+            status: 0,
+            msg: "Success",
+            data: { _id, name, services }
+          };
       }
       res.send(JSON.stringify(returnObj));
     }
@@ -78,7 +83,7 @@ app.post("/loginAccount", async (req, res) => {
 app.post("/addShelter", async (req, res) => {
   const name = req.query.name;
   const address = req.query.address;
-  const services = JSON.parse(req.query.services);
+  const { services } = JSON.parse(req.query.services);
 
   console.log(services);
 
@@ -131,7 +136,7 @@ app.get("/getPlaces", async (req, res) => {
 app.post("/getPlacesByServices", async (req, res) => {
   const { services } = req.query;
   const parsedServices = JSON.parse(services);
-  console.log(services);
+  // console.log(services);
 
   let returnObj = { status: 0, msg: "" };
   const collection = client.db("main").collection("places");

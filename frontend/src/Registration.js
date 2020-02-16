@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Button,
@@ -19,14 +19,14 @@ class Registration extends Component {
     services: [],
   };
 
-  onSelectionsChange = (selections) => {
+  onSelectionsChange = selections => {
     this.setState({
-      services: selections
+      services: selections,
     });
-  }
+  };
 
   toggleRegMode() {
-    const { isClient } = this.state;
+    const {isClient} = this.state;
     this.setState({
       isClient: !isClient,
       name: '',
@@ -34,12 +34,13 @@ class Registration extends Component {
       username: '',
       password: '',
       userType: 'shelter',
-      services: []
+      services: [],
     });
   }
   render() {
-    const { name, services, username, address, password } = this.state;
-    const { navigation } = this.props;
+    const {name, services, username, address, password} = this.state;
+    const servicesArray = services.map(s => s.value.toLowerCase());
+    const {navigation} = this.props;
     return (
       <ImageBackground
         source={background}
@@ -60,10 +61,10 @@ class Registration extends Component {
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
-              onChangeText={(text) => {
+              onChangeText={text => {
                 this.setState({
-                  name: text
-                })
+                  name: text,
+                });
               }}
             />
           </View>
@@ -73,10 +74,10 @@ class Registration extends Component {
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
-              onChangeText={(text) => {
+              onChangeText={text => {
                 this.setState({
-                  address: text
-                })
+                  address: text,
+                });
               }}
             />
           </View>
@@ -86,10 +87,10 @@ class Registration extends Component {
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
-              onChangeText={(text) => {
+              onChangeText={text => {
                 this.setState({
-                  username: text
-                })
+                  username: text,
+                });
               }}
             />
           </View>
@@ -99,10 +100,10 @@ class Registration extends Component {
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
-              onChangeText={(text) => {
+              onChangeText={text => {
                 this.setState({
-                  password: text
-                })
+                  password: text,
+                });
               }}
             />
           </View>
@@ -110,19 +111,29 @@ class Registration extends Component {
             <SelectMultiple
               items={availServices}
               selectedItems={services}
-              onSelectionsChange={this.onSelectionsChange} />
+              onSelectionsChange={this.onSelectionsChange}
+            />
           </View>
           <Button
             title="Sign up"
             onPress={async () => {
-
-              let shelterResult = await fetch(`http://10.0.2.2:3001/addShelter?name=${name}&address=${address}&services=${JSON.stringify(services)}`, {
-                method: 'POST'
-              });
-              let userResult = await fetch(`http://10.0.2.2:3001/addAccount?username=${username}&password=${password}`, {
-                method: 'POST',
-              });
-              navigation.navigate('Map', { services: services });
+              let shelterResult = await fetch(
+                `http://10.0.2.2:3001/addShelter?name=${name}&address=${address}&services=${JSON.stringify(
+                  {services: servicesArray},
+                )}`,
+                {
+                  method: 'POST',
+                },
+              );
+              let userResult = await fetch(
+                `http://10.0.2.2:3001/addAccount?username=${username}&password=${password}&services=${JSON.stringify(
+                  {services: servicesArray},
+                )}`,
+                {
+                  method: 'POST',
+                },
+              );
+              navigation.navigate('Map', {services: services});
             }}
           />
         </View>

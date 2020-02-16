@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Button,
@@ -10,26 +10,24 @@ import {
 } from 'react-native';
 const background = require('../assets/images/background.jpeg');
 
-const availServices=['Shelter', 'Food', 'Medical', 'Other'];
+const availServices = ['Shelter', 'Food', 'Medical', 'Other'];
 import SelectMultiple from 'react-native-select-multiple';
 
 class RegisterUser extends Component {
-
   state = {
     username: '',
     password: '',
-    services: []
-  }
+    services: [],
+  };
 
-
-  onSelectionsChange = (selections) => {
+  onSelectionsChange = selections => {
     this.setState({
-      services: selections
-    })
-  }
+      services: selections,
+    });
+  };
   render() {
-    const { username, password, services } = this.state;
-    const { navigation } = this.props;
+    const {username, password, services} = this.state;
+    const {navigation} = this.props;
     return (
       <ImageBackground
         source={background}
@@ -43,10 +41,10 @@ class RegisterUser extends Component {
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
-              onChangeText={(text) => {
+              onChangeText={text => {
                 this.setState({
-                  username: text
-                })
+                  username: text,
+                });
               }}
             />
           </View>
@@ -56,10 +54,10 @@ class RegisterUser extends Component {
               style={styles.input}
               resizeMode="contain"
               underlineColorAndroid="transparent"
-              onChangeText={(text) => {
+              onChangeText={text => {
                 this.setState({
-                  password: text
-                })
+                  password: text,
+                });
               }}
             />
           </View>
@@ -67,15 +65,20 @@ class RegisterUser extends Component {
             <SelectMultiple
               items={availServices}
               selectedItems={services}
-              onSelectionsChange={this.onSelectionsChange} />
+              onSelectionsChange={this.onSelectionsChange}
+            />
           </View>
           <Button
             title="Sign up"
             onPress={async () => {
-
-              let userResult = await fetch(`http://10.0.2.2:3001/addAccount?username=${username}&password=${password}&services=${JSON.stringify(services)}`, {
-                method: 'POST',
-              });
+              let userResult = await fetch(
+                `http://10.0.2.2:3001/addAccount?username=${username}&password=${password}&services=${JSON.stringify(
+                  services,
+                )}`,
+                {
+                  method: 'POST',
+                },
+              );
 
               navigation.navigate('Map', {services: services});
             }}
