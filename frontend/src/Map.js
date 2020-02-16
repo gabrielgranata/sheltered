@@ -46,8 +46,21 @@ export default class Map extends Component {
     async componentDidMount() {
         this.requestLocationPermission();
         let servicesA = await this.getServices();
-        let shelters = await fetch(`http://10.0.2.2:3001/getPlacesByServices?services=${JSON.stringify(servicesA)}`);
-        await this.convertAllToLatLong(await shelters.json());
+        for(let i = 0; i < servicesA.length; i++) {
+            servicesA[i] = servicesA[i].toLowerCase();
+        }
+        let shelters = await fetch(`http://10.0.2.2:3001/getPlacesByServices?services=["shelter", "medical"]`, {
+            method: 'POST'
+        });
+        let sheltersArray = (await shelters.json())["data"];
+        if (sheltersArray.length > 0) {
+            await this.convertAllToLatLong(sheltersArray);
+        } else {
+            this.setState({
+                loading: false, shelters: []
+            });
+        }
+        
         
     }
 
@@ -98,7 +111,7 @@ export default class Map extends Component {
                     provider={PROVIDER_GOOGLE}
                     ref={map => this._map = map}
                     initialRegion={{
-                        latitude: this.state.shelters[0].lat, longitude: this.state.shelters[0].lng, latitudeDelta: 0.09,
+                        latitude: shelters.length ? shelters[0].lat : 0, longitude: shelters.length ? shelters[0].lng : 0, latitudeDelta: 0.09,
                         longitudeDelta: 0.035
                     }}
                     style={styles.map}
