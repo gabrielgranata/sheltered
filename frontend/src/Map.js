@@ -61,6 +61,7 @@ export default class Map extends Component {
   async componentDidMount() {
     this.requestLocationPermission();
     let servicesA = await this.getServices();
+    console.log(servicesA);
     for (let i = 0; i < servicesA.length; i++) {
       servicesA[i] = servicesA[i].toLowerCase();
     }
@@ -82,11 +83,11 @@ export default class Map extends Component {
   }
 
   getServices = () => {
-    const services = this.props.route.params.services;
+    const services = JSON.parse(this.props.route.params.services);
     let servicesArray = [];
     if (!services) return servicesArray;
     for (let i = 0; i < services.length; i++) {
-      servicesArray.push(services[i]['value']);
+      servicesArray.push((services[i]['value']).toLowerCase());
     }
     return servicesArray;
   };
